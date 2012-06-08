@@ -1,0 +1,76 @@
+1000     12557  0.0  0.0   4392   140 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/db/;?node db_mysql.js;
+1000     12560  0.0  0.1 709500  6584 ?        Sl   Jun05   0:06 node db_mysql.js
+1000     12564  0.0  0.0   4392   140 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/db/;?node db_mysql.js;
+1000     12566  0.0  0.1 709516  6424 ?        Sl   Jun05   0:05 node db_mysql.js
+1000     12878  0.0  0.0   4392   140 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node main.js;
+1000     12881  0.0  0.1 709520  6764 ?        Sl   Jun05   0:06 node main.js
+1000     12885  0.0  0.0   4392    44 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node main.js;
+1000     12888  0.0  0.1 709528  6580 ?        Sl   Jun05   0:05 node main.js
+1000     12892  0.0  0.0   4392    44 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node main.js;
+1000     12893  0.0  0.1 709516  4880 ?        Sl   Jun05   0:05 node main.js
+1000     13444  0.0  0.0   4392   140 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     13446  0.0  0.3 718332 12104 ?        Sl   Jun05   0:00 node app.js
+1000     13492  0.0  0.0   4392    44 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     13495  0.0  0.1 717752  5312 ?        Sl   Jun05   0:00 node app.js
+1000     13634  0.0  0.0   4392    40 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     13637  0.0  0.2 717752 10796 ?        Sl   Jun05   0:00 node app.js
+1000     13642  0.0  0.0   4392    44 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     13644  0.0  0.3 718324 11412 ?        Sl   Jun05   0:00 node app.js
+1000     13749  0.0  0.0   4392   136 ?        S    Jun05   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     13752  0.0  0.3 717744 11644 ?        Sl   Jun05   0:00 node app.js
+1000     14737  0.0  0.0   4392   140 ?        S    09:31   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     14739  0.0  0.3 717760 11644 ?        Sl   09:31   0:00 node app.js
+1000     14842  0.0  0.0   4392   140 ?        S    09:50   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     14844  0.0  0.3 718468 12208 ?        Sl   09:50   0:00 node app.js
+1000     14860  0.0  0.0   4392    44 ?        S    09:53   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     14862  0.0  0.1 718812  6468 ?        Sl   09:53   0:00 node app.js
+1000     14869  0.0  0.0   4392    44 ?        S    09:54   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     14871  0.0  0.2 717776 10056 ?        Sl   09:54   0:00 node app.js
+1000     14881  0.0  0.0   4392   136 ?        S    09:55   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     14883  0.0  0.3 717752 11168 ?        Sl   09:55   0:01 node app.js
+1000     15189  0.0  0.0   4392   140 ?        S    10:00   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15192  0.0  0.2 718624  8716 ?        Sl   10:00   0:00 node app.js
+1000     15235  0.0  0.0   4392   136 ?        S    10:08   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15237  0.0  0.3 718612 11816 ?        Sl   10:08   0:00 node app.js
+1000     15313  0.0  0.0   4392   140 ?        S    10:23   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15315  0.0  0.2 717752 10480 ?        Sl   10:23   0:00 node app.js
+1000     15321  0.0  0.0   4392   140 ?        S    10:23   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15323  0.0  0.3 717936 12484 ?        Sl   10:23   0:00 node app.js
+1000     15339  0.0  0.0   4392    44 ?        S    10:25   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15341  0.0  0.2 718332 10804 ?        Sl   10:25   0:00 node app.js
+1000     15365  0.0  0.0   4392   140 ?        S    10:26   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15368  0.0  0.3 717556 11788 ?        Sl   10:26   0:00 node app.js
+1000     15376  0.0  0.0   4392    44 ?        S    10:27   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15379  0.0  0.2 719024  8792 ?        Sl   10:27   0:00 node app.js
+1000     15470  0.0  0.0   4392    44 ?        S    10:33   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     15473  0.0  0.0 718420  2484 ?        Sl   10:33   0:01 node app.js
+1000     18160  0.0  0.0   4392   184 ?        S    12:08   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     18163  0.0  0.3 718348 13920 ?        Sl   12:08   0:00 node app.js
+1000     18436  0.0  0.0   4392    92 ?        S    12:15   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     18439  0.0  0.3 717752 12940 ?        Sl   12:15   0:00 node app.js
+1000     18504  0.0  0.0   4392    92 ?        S    12:17   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     18507  0.0  0.3 718400 13164 ?        Sl   12:17   0:00 node app.js
+1000     18592  0.0  0.0   4392   188 ?        S    12:19   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     18595  0.0  0.4 718324 15296 ?        Sl   12:19   0:00 node app.js
+1000     18679  0.0  0.0   4392   184 ?        S    12:21   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     18681  0.0  0.3 716732 14764 ?        Sl   12:21   0:00 node app.js
+1000     21018  0.0  0.0   4392   188 ?        S    13:24   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     21021  0.0  0.4 717752 14956 ?        Sl   13:24   0:00 node app.js
+1000     25562  0.0  0.0   4392   188 ?        S    15:39   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25565  0.0  0.4 718640 15608 ?        Sl   15:39   0:00 node app.js
+1000     25663  0.0  0.0   4392   184 ?        S    15:42   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25666  2.7  0.6 723028 25488 ?        Sl   15:42   0:20 node app.js
+1000     25722  0.0  0.0   4392   188 ?        S    15:44   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25724  0.0  0.4 717776 15084 ?        Sl   15:44   0:00 node app.js
+1000     25731  0.0  0.0   4392   184 ?        S    15:44   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25733  0.0  0.4 717776 15072 ?        Sl   15:44   0:00 node app.js
+1000     25755  0.0  0.0   4392   184 ?        S    15:44   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25758  0.0  0.4 718304 15272 ?        Sl   15:44   0:00 node app.js
+1000     25831  0.0  0.0   4392   212 ?        S    15:47   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25834  0.0  0.4 718300 15456 ?        Sl   15:47   0:00 node app.js
+1000     25945  0.0  0.0   4392   604 ?        S    15:50   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25948  0.0  0.4 718228 16328 ?        Sl   15:50   0:00 node app.js
+1000     25969  0.0  0.0   4392   608 ?        S    15:50   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     25972  0.1  0.4 718596 16460 ?        Sl   15:50   0:00 node app.js
+1000     26025  0.0  0.0   4392   608 ?        S    15:52   0:00 /bin/sh -c cd /var/www/nodejstest/;?node app.js;
+1000     26028  0.1  0.4 718604 16616 ?        Sl   15:52   0:00 node app.js
