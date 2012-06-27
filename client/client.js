@@ -12,23 +12,15 @@ var client = function() {
         });
     };
     
-    ////////////////////////////////////////////////////////////////////////////
-    /** EVENTS AND EXTENDABLE METHODS */
-    ////////////////////////////////////////////////////////////////////////////
-    self.bindings = {
-        /* 'testevent' : function (socket) {} */
-    };
-     ///////////////////////////////////////////////////////////////////////////
-    /** END EVENTS AND EXTENDABLE METHODS */
-    ////////////////////////////////////////////////////////////////////////////
+    self.__callback = { /* 'testevent' : function (socket) {} */ };
     
     /*
      * init sockserver
      */
     self.bindMethods = function() {
         self.socket.on('connect', function () {
-            for(var evt in self.bindings) {
-                self.socket.on(evt, self.bindings[evt]);
+            for(var evt in self.__callback) {
+                self.socket.on(evt, self.__callback[evt]);
             }
         });
         return true;

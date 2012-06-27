@@ -11,7 +11,7 @@
         <script>
             $(document).ready(function() {
                 var jobstatus = new client_jobstatus( new client() );
-                jobstatus.changed({'meinjob' : 18});
+                jobstatus.changeit({'meinjob' : 18});
             });
         </script>
     </head>

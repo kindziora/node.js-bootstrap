@@ -4,6 +4,7 @@
  */
 module.exports = {
     'db': {
+        'model' : require('./g/db/mysql/run'),
         'dbconnect': {
             host     : 'localhost',
             user     : 'root',
@@ -12,5 +13,6 @@ module.exports = {
         },
         'debug' : true
     },
-    'port' : 8111
+    'port' : 8111,
+    'auth' : require('./g/auth')
 };

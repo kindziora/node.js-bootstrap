@@ -1,5 +1,6 @@
 /**
  * 2012 by alexander kindziora
+ * this class contains just fetching and building methods to process data from mysql or to build querys
  */
 module.exports = function(config) {
     var self = this;
@@ -8,14 +9,17 @@ module.exports = function(config) {
     self.result = {};
     
     self.modelCb = require('./model');
-    console.log(self.modelCb);
+    
     /**
      * 
      */
     this.constructor = function() {
         self._mysql      = require('mysql');
+        
         self.connection = self._mysql.createConnection(self.cfg.dbconnect);
+        
         self.connection.connect();
+        return self;
     };
     
     /**
@@ -52,6 +56,7 @@ module.exports = function(config) {
      * eg. squery = 'SELECT * FROM User WHERE 1 LIMIT 10;'
      */
     self.query = function (squery, rowCb) {
+        console.log(squery);
         if(g.isFunction(rowCb)) {
             self.fetchRows.rowCb = rowCb;
         } else {
@@ -75,23 +80,26 @@ module.exports = function(config) {
         
         if (count >= 0) {
             if (!keys[0].indexOf(operators)) {
-                queryString = ' WHERE ' + self._mysql.escape(keys[0]) + "='" + self._mysql.escape(query[keys[0]]) + "'";
+                queryString = ' WHERE ' + self.connection.escape(keys[0]) + "='" + self.connection.escape(query[keys[0]]) + "'";
             } else {
-                queryString += ' AND ' + self._mysql.escape(keys[0][0]) + keys[0] + "'" + self._mysql.escape(key[0][1]) + "'";
+                queryString += ' AND ' + self.connection.escape(keys[0][0]) + keys[0] + "'" + self.connection.escape(key[0][1]) + "'";
             }
         } else {
             queryString = ' '; // wenn kein such kriterium/filter
         }
         
         if (count > 1) {
-            if (!keys[0].indexOf(operators)) unset(query[keys[0]]);
+            if (!keys[0].indexOf(operators)){
+                query[keys[0]] = null;
+                delete query[keys[0]];
+            }
             var key, val;
             for (key in query) {
                 var val = query[key];
                 if (!keys[0].indexOf(operators)) {
-                    queryString += ' AND ' + self._mysql.escape(key) + '=' + "'" + self._mysql.escape(val) + "'";
+                    queryString += ' AND ' + self.connection.escape(key) + '=' + "'" + self.connection.escape(val) + "'";
                 } else {
-                    queryString += ' AND ' + self._mysql.escape(val[0]) + key + " '" + self._mysql.escape(val[1]) + "'";
+                    queryString += ' AND ' + self.connection.escape(val[0]) + key + " '" + self.connection.escape(val[1]) + "'";
                 }
                 i++;
             }
@@ -120,12 +128,11 @@ module.exports = function(config) {
             comma = '';
             if (i < cdata)
                 comma += ",";
-            queryString += $injectFunction(self._mysql.escape(key), self._mysql.escape(val), self._mysql.escape(comma));
+            queryString += $injectFunction(self.connection.escape(key), self.connection.escape(val), self.connection.escape(comma));
         }
         return queryString;
     };
     
-    this.constructor();
-    return self;
+    return this.constructor();
 };
  
