@@ -5,19 +5,22 @@
 
 var client = function() {
     var self = this;
+    
     self.connect = function() {
         self.socket = io.connect('http://localhost/', {
-            'port':8111
+            'port' : 8111
         });
     };
     
     ////////////////////////////////////////////////////////////////////////////
     /** EVENTS AND EXTENDABLE METHODS */
     ////////////////////////////////////////////////////////////////////////////
-    
     self.bindings = {
-        'testevent' : function (socket) {}
+        /* 'testevent' : function (socket) {} */
     };
+     ///////////////////////////////////////////////////////////////////////////
+    /** END EVENTS AND EXTENDABLE METHODS */
+    ////////////////////////////////////////////////////////////////////////////
     
     /*
      * init sockserver
@@ -26,7 +29,6 @@ var client = function() {
         self.socket.on('connect', function () {
             for(var evt in self.bindings) {
                 self.socket.on(evt, self.bindings[evt]);
-                
             }
         });
         return true;

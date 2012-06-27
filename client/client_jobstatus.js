@@ -7,8 +7,8 @@ var client_jobstatus = function(self) {
  
     self.bindings.response = function (data) {
         var noty_id = noty({
-            'layout': 'bottomRight',
-            text: 'Feld Briefing wurde geändert, neuer Wert: ' + data[0].briefing
+            'layout' : 'bottomRight',
+            text : 'Feld Briefing wurde geändert, neuer Wert: ' + data[0].briefing
         });
     };
     

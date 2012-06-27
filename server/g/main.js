@@ -13,8 +13,17 @@ module.exports = function (config) {
      * init database
      */
     self.initDb = function() {
-        self.db = new require('./db/mysql')(config.db);
+        
+        self.db = new require('./db/mysql/mysql')(config.db);
+        
         return true;
+    };
+    
+    /**
+     * 
+     */
+    self.getModel = function(name) {
+         self.db.call(self.db.modelCb, name)
     };
     
     /*
