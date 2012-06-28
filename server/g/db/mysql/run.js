@@ -56,7 +56,6 @@ module.exports = function(config) {
      * eg. squery = 'SELECT * FROM User WHERE 1 LIMIT 10;'
      */
     self.query = function (squery, rowCb) {
-        console.log(squery);
         if(g.isFunction(rowCb)) {
             self.fetchRows.rowCb = rowCb;
         } else {
@@ -72,17 +71,20 @@ module.exports = function(config) {
      * @return <type>
      */
     self._buildWhereQuery = function (query) {
-        var operators = array('<', '>', 'OR', 'AND', 'LIKE', 'NOT LIKE', '!='),
+        
+        var operators = ['<', '>', 'OR', 'AND', 'LIKE', 'NOT LIKE', '!='],
         i = 0,
         keys = g.array_keys(query),
         queryString,
-        count = g.count(query);
+        count = g.count(query),
+        knull = query[keys[0]],
+        knullKeys = g.array_keys(knull)[0];
         
         if (count >= 0) {
-            if (!keys[0].indexOf(operators)) {
-                queryString = ' WHERE ' + self.connection.escape(keys[0]) + "='" + self.connection.escape(query[keys[0]]) + "'";
-            } else {
-                queryString += ' AND ' + self.connection.escape(keys[0][0]) + keys[0] + "'" + self.connection.escape(key[0][1]) + "'";
+            if (operators.indexOf(knullKeys) == -1) {
+                queryString = ' WHERE `' + keys[0] + "`=" + self.connection.escape(query[keys[0]]);
+            } else if(operators.indexOf(knullKeys)) {
+                queryString = ' WHERE `' + keys[0] + "` " + knullKeys + " " + self.connection.escape(knull[knullKeys]);
             }
         } else {
             queryString = ' '; // wenn kein such kriterium/filter

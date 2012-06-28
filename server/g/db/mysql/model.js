@@ -17,6 +17,7 @@ module.exports = function(table) {
     var self = this;
     self.model = table;
     
+    
     /**
      * nimmt nur daten eines arrays wenn die db die felder auch besitzt
      * die Felder die nicht dem db schema entsprechen werden ignoriert
@@ -25,6 +26,7 @@ module.exports = function(table) {
      */
     self.cleanData = function (data, cb) {
         self.query("DESCRIBE `" + self.model + "`", function(row, fields) {
+            self.fields = fields;
             cb( g.array_intersect_key(data, fields) );
         });
     };
@@ -36,17 +38,34 @@ module.exports = function(table) {
     /**
      * 
      */
-    self.get = function (where, fields, cb) {
+    self.get = function (where, cb) {
         var wq = '';
-        if (fields[0] === '*') {
-            if (!empty(self.fields))
-                fields = self.fields;
+        if (!g.isset(where.fields) || where.fields[0] === '*') {
+            if (g.count(self.fields) > 0){
+                where.fields = self.fields;
+            }else {
+                where.fields = ['*'];
+            }  
         }
 
-        if (!empty(where))
-            wq = self._buildWhereQuery(where);
+        if (g.count(where.data) > 0) {
+            wq = self._buildWhereQuery(where.data);
+            
+            
+            if(g.isset(where.limit) && g.isset(where.offset)) {
+                wq += ' LIMIT ' + where.offset + ',' + where.limit;
+            }else {
+                if(g.isset(where.limit)) {
+                    wq += ' LIMIT 0,' + where.limit;
+                }
+            }
+            
+            
+            
+        }
+            
         
-        self.query("SELECT " + ltrim(fields.join(','), ',') + " FROM `" + self.model + '` ' + wq, cb);
+        self.query("SELECT " + g.ltrim(where.fields.join(','), ',') + " FROM `" + self.model + '` ' + wq, cb);
        
     };
     

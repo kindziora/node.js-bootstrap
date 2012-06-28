@@ -1,7 +1,7 @@
 /**
  * global functions
  */
-module.exports = function () {
+g = function () {
     var me = this;
     me.cbs = {};
     
@@ -103,5 +103,5 @@ module.exports = function () {
     
     return me;
 
-};
+}();
  
