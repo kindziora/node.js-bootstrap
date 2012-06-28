@@ -134,14 +134,14 @@
         
         <div class="container">
             <a name="4"></a>
-            <h1>Integration in das crowdmodul</h1>
+            <h1>Integration</h1>
              <ul>
-                <li><b>session des login nutzen</b></li>
-                <li><b>session gegen db session abgleichen</b></li>
-                <li><b>client-side trigger VS serverseitige trigger...</b></li>
+                <li>session des crowdmoduls nutzen</li>
+                <li>session gegen db session abgleichen</li>
+                <li>client-side trigger VS serverseitige trigger...</li>
             </ul>
         </div>
-
+        
         <script>
             $(document).ready(function() {
                 var jobstatus = new client_jobstatus( new client() );
