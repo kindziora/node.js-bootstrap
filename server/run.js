@@ -3,10 +3,8 @@
  * it handles the inheritance order of our server
  */
 
-module.exports = function () {
-    return  new require('./myserver')(
-                new require('./g/main')(
-                    require('./myconfig')
-                )
-            );
-}();
+module.exports =  new require('./myserver')(
+    new require('./g/main')(
+        require('./myconfig')
+        )
+    );

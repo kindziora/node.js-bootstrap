@@ -19,7 +19,7 @@ var client_jobstatus = function(self) {
      */
     self.changeit = function(job) {
         
-        self.socket.emit('getJob', {
+        self.socket.emit('getUser', {
             'job': job
         });
         

@@ -69,35 +69,39 @@ module.exports = function (config) {
      * init sockserver
      */
     self.bindMethods = function() {
-        try{
+        try {
+            
             /**
             * execute pre and call binding
             */
-            this.bindCallback = function (socket) {
+            self.io.sockets.on('connection', function (socket) {
                 self.socket = socket;
-                for(var evt in self.__execute) {
-                    socket.on(evt, function(sock) {
-                    
-                        if(!g.isFunction(self.__before)) {
-                            self.__before = function(psock, evt) {
-                                return {
-                                    'data' : psock, 
-                                    'success' : true
-                                };
-                            };
-                        }
-                    
+                
+                if(!g.isFunction(self.__before)) {
+                    self.__before = function(psock, evt) {
+                        return {
+                            'data' : psock, 
+                            'success' : true
+                        };
+                    };
+                }
+                
+                /* variable injection via lambda function factory used in iteration */
+                var factory = function(evt) {
+                    return function(sock) {
                         var result = self.__before(sock, evt);
-                    
                         if(result.success) {
                             self.__execute[evt](result.data);
                         }
-                    
-                    });
+                    };
+                };
+                
+                /* binding all methods */
+                for(var evt in self.__execute) {
+                    socket.on(evt, factory(evt));
                 }
-            };
-        
-            self.io.sockets.on('connection', this.bindCallback);
+             
+            });
         }catch(e) {
             return e;
         }

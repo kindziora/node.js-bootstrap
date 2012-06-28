@@ -56,6 +56,7 @@ module.exports = function (self) {
         * find job by id and return job to client
         */
         getJob : function (data) {
+            console.log('getJob');
             self.MODEL.job.getById(data.job.meinjob.id, function(rows, fields) {
                 self.socket.broadcast.emit('getJob', rows);
             });
@@ -64,7 +65,7 @@ module.exports = function (self) {
          * find user by name and return user to client
          */
         getUser : function (data) {
-            
+            console.log('getUser');
             self.MODEL.user.get({
                 'name' : 'test'
             }, function(rows, fields) {
@@ -75,10 +76,13 @@ module.exports = function (self) {
         * save user and return result to client
         */
         saveUser : function (data) {
-            console.log(data, 'saveUser');
+            console.log('saveUser');
             /*self.MODEL.user.insert(data.user, function(rows, fields) {
                 self.socket.broadcast.emit('response', rows.id);
             });*/
+        },
+        test : function (data) {
+            console.log('test');
         }
     };
     
