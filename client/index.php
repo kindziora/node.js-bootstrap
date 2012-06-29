@@ -140,6 +140,9 @@
                 <li>session gegen db session abgleichen</li>
                 <li>client-side trigger VS serverseitige trigger...</li>
             </ul>
+            <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing" target="_blank">socket.io Authorizing</a>
+            <br/>
+            <a href="http://www.danielbaulig.de/socket-ioexpress/" target="_blank">sessions, express und socket.io</a>
         </div>
         
         <script>
@@ -150,9 +153,9 @@
                 $('input[name="testit[2]"]').click(jobstatus.broadcastMessage);
                 //$('#input02').keyup(jobstatus.findUser);
                 $('#input03').focus(jobstatus.findActiveUser);
-
+                
             });
-        </script>
+        </script>ö
         
         <script src="http://localhost:8111/socket.io/socket.io.js"></script>
         <script src="client.js"></script>

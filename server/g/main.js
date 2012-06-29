@@ -9,13 +9,17 @@ module.exports = function (config) {
     
     g = new require('./g')(); // global functions singleton
     self.MODEL = {};
+    Sequelize = require("sequelize");
+    var baseModel = require('./model');
     
     /**
      * init database
      */
     self.initDb = function() {
         try{
-            self.db = new config.db.model(config.db);
+            self.db = new Sequelize(config.db.database, config.db.user, config.db.password, {
+                'host' : config.db.host
+            });
         }catch(e) {
             return e;
         }
@@ -53,14 +57,6 @@ module.exports = function (config) {
             return e;
         }
         return true;
-    };
-    
-
-    /**
-     * @return instance of db model "name"
-     */
-    self.getModel = function(name) {
-        return self.db.modelCb.call(self.db, name);
     };
     
     self.__execute = { /*'testevent' : function (socket) {}*/ };
@@ -109,6 +105,13 @@ module.exports = function (config) {
     };
     
     /**
+     * @return instance of db model "name"
+     */
+    self.getModel = function(name) {
+        return new require('../model/' + name)(baseModel(self.db));
+    };
+    
+    /**
      * init app
      */
     self.constructor = function() {
@@ -128,11 +131,11 @@ module.exports = function (config) {
         });
         
         init.push({
-            'initDB:' : self.initAuth()
+            'initAuth:' : self.initAuth()
         });
         console.log(init);
     };
-   
+    
     //self.constructor(); ONLY in child class
     return self;
 };

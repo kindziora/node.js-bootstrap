@@ -4,14 +4,10 @@
  */
 module.exports = {
     'db': {
-        'model' : require('./g/db/mysql/run'),
-        'dbconnect': {
-            host     : 'localhost',
-            user     : 'root',
-            password : 'root',
-            database : 'crowdmodul'
-        },
-        'debug' : true
+        host     : 'localhost',
+        user     : 'root',
+        password : 'root',
+        database : 'crowdmodul'
     },
     'port' : 8111,
     'auth' : require('./g/auth')

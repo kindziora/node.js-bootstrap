@@ -33,7 +33,7 @@ var client_jobstatus = function(self) {
         usernotice : function (data) {
             var list = self.makelist(data.result, 'username', 'kein user gefunden', true);
             
-            list = list.replace(new RegExp(data.keyword,'g'), '<b>' + data.keyword + '</b>');
+            list = list.replace(new RegExp(data.keyword, 'gi'), '<b>' + data.keyword + '</b>');
             
             self.result('<ul>' + list +  '</ul>');
         },

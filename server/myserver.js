@@ -10,7 +10,7 @@ module.exports = function (self) {
     function constructor()  {
         
         self.constructor(); //call parent constructor
-        
+       
         self.MODEL.job = self.getModel('Job');
         self.MODEL.user = self.getModel('User');
         
@@ -32,7 +32,6 @@ module.exports = function (self) {
          * ]
          * 
          */
-       
         
         var permission = self.myauth.checkPermission();
         
@@ -65,38 +64,28 @@ module.exports = function (self) {
         },
         /**
          * find user by name and return user to client
+         * with own mysql class
          */
         getUser : function (data) {
-            this.query = {};
-            
-            this.query.limit = 10;
-            this.query.data = {
-                'username' : {
-                    'LIKE' : "%" + data.name + "%"
-                }
-            };
-            this.query.fields = ['id','username'];
-            
-            
-            this.result = function(rows, fields) {
+ 
+            this.result = function(entry) {
                 self.socket.emit('usernotice', {
-                    'result' : rows, 
+                    'result' : entry, 
                     'keyword' : data.name
                 });
             };
             
             /* execute search on user table*/
-            self.MODEL.user.get(this.query, this.result);
+            self.MODEL.user.findByName(data.name, this.result);
             
         },
         /**
         * save user and return result to client
         */
         saveUser : function (data) {
-            
-        /*self.MODEL.user.insert(data.user, function(rows, fields) {
-            self.socket.broadcast.emit('response', rows.id);
-        });*/
+            /*self.MODEL.user.insert(data.user, function(rows, fields) {
+                self.socket.broadcast.emit('response', rows.id);
+            });*/
         },
         getClientList : function (data) {
             var clients =  self.io.sockets.clients(),
@@ -114,7 +103,6 @@ module.exports = function (self) {
             self.socket.broadcast.emit('broadcast', data);
         }
     };
-    
     
     return constructor();
 };
