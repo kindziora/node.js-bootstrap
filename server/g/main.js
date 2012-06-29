@@ -10,8 +10,7 @@ module.exports = function (config) {
     g = new require('./g')(); // global functions singleton
     self.MODEL = {};
     Sequelize = require("sequelize");
-    var baseModel = require('./model');
-    
+ 
     /**
      * init database
      */
@@ -31,7 +30,10 @@ module.exports = function (config) {
      */
     self.initAuth = function() {
         try{
-            self.myauth = new config.auth({});
+            self.myauth = new config.auth({
+                'server' : self.io,
+                'db' : self.db
+            });
             
         }catch(e) {
             return e;
@@ -47,6 +49,10 @@ module.exports = function (config) {
             var express = require('express');
             self.server = express.createServer();
             self.io = require('socket.io').listen(self.server);
+            self.server.use(express.cookieParser());
+            
+            //self.server.use(express.session({secret: 'secret', key: 'express.sid'}));
+            
             self.server.use(express.static(__dirname + '/public'));
             self.server.use(express.errorHandler({
                 showStack: true, 
@@ -108,7 +114,7 @@ module.exports = function (config) {
      * @return instance of db model "name"
      */
     self.getModel = function(name) {
-        return new require('../model/' + name)(baseModel(self.db));
+        return new require('../model/' + name)( require('./model')(self.db));
     };
     
     /**
@@ -127,12 +133,14 @@ module.exports = function (config) {
         });
         
         init.push({
-            'bindMethods' : self.bindMethods()
+            'initAuth:' : self.initAuth()
         });
         
         init.push({
-            'initAuth:' : self.initAuth()
+            'bindMethods' : self.bindMethods()
         });
+        
+        
         console.log(init);
     };
     

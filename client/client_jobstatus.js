@@ -16,7 +16,7 @@ var client_jobstatus = function(self) {
     
     self.makelist = function(data, field, defaultv, lis) {
         var liste = defaultv;
-        for(var user in data){
+        for(var user in data) {
             if(liste === defaultv)liste = '';
             if(g.isset(lis)){
                 liste += '<li>' + (parseInt(user) +1) + '. ' + data[user][field] + '</li>';

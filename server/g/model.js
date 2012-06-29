@@ -57,6 +57,7 @@ module.exports = function (db) {
             'classMethods' : self,
             'freezeTableName' : true
         });
+        
         return self;
     };
     

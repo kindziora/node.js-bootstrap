@@ -16,7 +16,7 @@ module.exports = function (self) {
         
         return self;
     };
-        
+    
     /**
      * magic function that executes every time before a __bind method was called
      * it returns the data that will be passed to __bind[METHODNAME](data)
@@ -33,15 +33,7 @@ module.exports = function (self) {
          * 
          */
         
-        var permission = self.myauth.checkPermission();
-        
-        if(!permission) {
-            /*auth failed*/
-            self.socket.emit('error', 'auth failed');
-            console.log('auth failed');
-            
-        }
-        console.log(data, type);
+         
         
         return {
             'data' : data,
@@ -83,7 +75,7 @@ module.exports = function (self) {
         * save user and return result to client
         */
         saveUser : function (data) {
-            /*self.MODEL.user.insert(data.user, function(rows, fields) {
+        /*self.MODEL.user.insert(data.user, function(rows, fields) {
                 self.socket.broadcast.emit('response', rows.id);
             });*/
         },
@@ -106,5 +98,3 @@ module.exports = function (self) {
     
     return constructor();
 };
-
-//app.db.destructor();
