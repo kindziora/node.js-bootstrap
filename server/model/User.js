@@ -13,8 +13,8 @@ module.exports = function (self) {
     };
     
     /**
-     * 
-     */
+     * @todo does not work needs debug
+     
     self.findByName = function(name, cb) {
         self.db.findAll({
             limit: 10,
@@ -24,7 +24,12 @@ module.exports = function (self) {
         .error(function (er) {
             console.log(er);
         });
+    };*/
+    
+    self.findByName = function(name, cb) {
+        self.sequelize.query( "SELECT * FROM `User` WHERE username LIKE '%" + name + "%' LIMIT 10", null, {raw: true}).on('success', cb);
     };
     
-    return self.constructor();
+    
+    return self.constructor(self);
 };

@@ -10,7 +10,9 @@ module.exports = function (config) {
     g = new require('./g')(); // global functions singleton
     self.MODEL = {};
     Sequelize = require("sequelize");
- 
+    self.session = {};
+    self.client = {};
+    
     /**
      * init database
      */
@@ -30,11 +32,7 @@ module.exports = function (config) {
      */
     self.initAuth = function() {
         try{
-            self.myauth = new config.auth({
-                'server' : self.io,
-                'db' : self.db
-            });
-            
+            self.myauth = new config.auth(self);
         }catch(e) {
             return e;
         }
@@ -52,6 +50,11 @@ module.exports = function (config) {
             self.server.use(express.cookieParser());
             
             //self.server.use(express.session({secret: 'secret', key: 'express.sid'}));
+            
+            self.server.use(function(req, res, next){
+                var sess = req.session;
+                console.log(req, sess);
+            });
             
             self.server.use(express.static(__dirname + '/public'));
             self.server.use(express.errorHandler({
@@ -74,11 +77,13 @@ module.exports = function (config) {
         try {
             
             /**
-            * execute pre and call binding
-            */
+             * execute pre and call binding
+             */
             self.io.sockets.on('connection', function (socket) {
                 self.socket = socket;
                 
+                self.myauth.connect(self.socket);
+
                 if(!g.isFunction(self.__before)) {
                     self.__before = function(psock, evt) {
                         return {
@@ -91,6 +96,7 @@ module.exports = function (config) {
                 /* variable injection via lambda function factory used in iteration */
                 var factory = function(evt) {
                     return function(sock) {
+                        console.log(sock.id);
                         var result = self.__before(sock, evt);
                         if(result.success) {
                             self.__execute[evt](result.data);
@@ -104,6 +110,9 @@ module.exports = function (config) {
                 }
              
             });
+            
+            self.io.sockets.on('disconnect', self.myauth.disconnect);
+            
         }catch(e) {
             return e;
         }
@@ -131,7 +140,7 @@ module.exports = function (config) {
         init.push({
             'initServer:' : self.initServer()
         });
-        
+       
         init.push({
             'initAuth:' : self.initAuth()
         });
@@ -139,7 +148,6 @@ module.exports = function (config) {
         init.push({
             'bindMethods' : self.bindMethods()
         });
-        
         
         console.log(init);
     };

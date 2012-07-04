@@ -7,45 +7,104 @@ module.exports = function (init) {
     self.db = init.db;
     
     self.checkPermission = function (data, accept) {
+        console.log('checkPermission PERMISSION');
         // check if there's a cookie header
         if (data.headers.cookie) {
-            var parseCookie = require('connect').utils.parseJSONCookie;
-               
-            // if there is, parse the cookie
-            data.cookie = parseCookie(data.headers.cookie);
             // note that you will need to use the same key to grad the
             // session id, as you specified in the Express setup.
             self.SID = data.headers.cookie.split('=')[1];
+            
+            self.model = new require('../model/Session')( require('./model')(self.db))
+            
+            /**
+             * entry found
+             */
+            this.success = function(entry){
+                self.entry = entry;
                 
-           var model = new require('../model/Session')( require('./model')(self.db))
+                if(!entry) return accept('No valid session id found in database.', false);
                 
-            model.db.find({
-                'where' : {
-                    'session_id' : self.SID + 'sd'
+                if(!g.isset(entry.session_json)){
+                    return accept('No session id found in database.', false);
                 }
-            }).success(function(entry){
-                if(!g.isset(entry))return accept('No session id found in database.', false);
-            })
-            .error(function(e){
-                return accept('error while fetching seesion against database', false);
-            });
                 
+                init.session = JSON.parse(g.base64_decode(entry.session_json));
+                
+                if(!g.isset(init.session.username)){
+                    return accept('No valid session id found in database.', false);
+                }
+                
+                if(g.isset(entry.node_id) && entry.node_id > 0){
+                    init.session.nodeId = entry.node_id;
+                }
+                // accept the incoming connection
+                
+                return accept(null, true);
+            };
+            
+            /**
+             * mysql sql error or db error
+             */
+            this.failed = function(e){
+                return accept('error while fetching session against database', false);
+            };
+            
+            self.model.db.find({
+                'where' : {
+                    'session_id' : self.SID
+                }
+            })
+            .success(this.success)
+            .error(this.failed);
+            
         } else {
             // if there isn't, turn down the connection with a message
             // and leave the function.
             return accept('No cookie transmitted.', false);
         }
-        // accept the incoming connection
-        accept(null, true);
+       
+        return accept(null, true);
     };
-  
     
-    self.constructor = function(model) {
- 
-        init.server.set('authorization', self.checkPermission); 
+    /**
+     *
+     */
+    self.connect = function(socket) {
+        console.log('connect PERMISSION');
+        if(g.isset(self.entry)) {
+        console.log('POSTAUTH', init.session);
+        /**
+            * @todo remove after updateRecords work 
+            */
+        self.model.setNodeId(socket.id, self.entry.session_id, function(result) {
+            init.session.nodeId = socket.id;
+            
+            var user = init.session;
+            init.client[user.id] = {
+                'username' : user.username, 
+                'socket' : socket.id
+            };
+        });
+            
+        }
+    };
+    
+    /**
+     * 
+     */
+    self.disconnect = function(socket) {
+        console.log('DELETE:' + socket.id);
+        init.client[init.session.id] = null;
+        delete init.client[init.session.id];
+       
+    };
+    
+    self.constructor = function() {
+        console.log('constructor PERMISSION');
+        init.io.set('authorization', self.checkPermission); 
         return self;
     };
    
     
-    return self.constructor(init.model);
+    return self.constructor();
 };

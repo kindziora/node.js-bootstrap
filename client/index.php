@@ -49,8 +49,8 @@
                 <li><a href="https://www.google.com/search?q=nodejs+performance" target="_blank">performance</a></li>
                 <li><a href="https://www.google.de/#hl=de&output=search&sclient=psy-ab&q=does+node+js+scale" target="_blank">skalierbarkeit durch seperaten node.js server</a></li>
                 <li><b>dediziertes Serversystem</b> ohne umwege wie bei php</li>
-                <li><a href="http://code.google.com/p/v8/" target="_blank">javascript</a> als lingua franca(server und clientseitig)</li>
-                <li><a href="https://github.com/felixge/node-mysql" target="_blank">mysql</a></li>
+                <li><a href="http://code.google.com/p/v8/" target="_blank">javascript</a> server und clientseitig</li>
+                <li><a href="https://github.com/felixge/node-mysql" target="_blank">mysql</a> durch <a href="http://www.sequelizejs.com/"  target="_blank">sequelize</a> ORM</li>
                 <li> 
                     <a href="http://socket.io/" target="_blank">socket.io</a>
                     <ul>
@@ -96,26 +96,16 @@
                 <div class="control-group">
                     <label class="control-label" for="input04">Messages senden</label>
                     <div class="controls">
-                        <input id="input04" name="uname" value="" placeholder="Namen eingeben" />
+                        <input id="input04name" name="uname" value="" placeholder="Namen eingeben" />
                         <input id="input04" name="messagetoclient" value="" placeholder="Nachricht eingeben" />
                         <input type="submit" class="btn" name="testit[3]" value="go" />
                         <p class="help-block">An bestimmten Benutzer Message senden.</p>
                     </div>
                 </div>   
                 <div class="control-group">
-                    <label class="control-label" for="input05">Messages an Gruppen</label>
-                    <div class="controls">
-                        <input id="group" name="group" value="" placeholder="Gruppe eingeben" />
-                        <input id="input05" name="messagetoclient" value="" placeholder="Nachricht eingeben" />
-                        <input type="submit" class="btn" name="testit[4]" value="go" />
-                        <p class="help-block">An bestimmte Benutzergruppen z.b Admins oder nur gurus Message senden.</p>
-                    </div>
-                </div>
-
-                <div class="control-group">
                     <label class="control-label" for="input05">u.s.w</label>
                     <div class="controls">
-                        <p class="help-block">Weitere Möglichkeiten ...</p>
+                        <p class="help-block">Weitere Möglichkeiten ... Nachrichten nur an bestimmte Gruppen(gurus, whitelist user, admins usw.).</p>
                     </div>
                 </div>
             </form>
@@ -124,39 +114,43 @@
         <div class="container">
             <a name="3"></a>
             <h1>Nutzung im crowdmodul</h1>
-            
             <ul>
                 <li><b>realtime notification</b></li>
+                <li><b>automatische, jobbezogene Benachrichtigungen</b></li>
+                <li><b>alle client-side Aktionen trackbar + <a href="https://github.com/niklasvh/html2canvas/">screenshots</a></b> für bessere Fehleranalyse</li>
                 <li><b>shoutbox</b></li>
                 <li><b>chatsystem</b></li>
             </ul>
         </div>
-        
+
         <div class="container">
             <a name="4"></a>
-            <h1>Integration</h1>
-             <ul>
-                <li>session des crowdmoduls nutzen</li>
-                <li>session gegen db session abgleichen</li>
-                <li>client-side trigger VS serverseitige trigger...</li>
+            <h1>Integration in das crowdmodul</h1>
+            <ul>
+                <li>session des crowdmoduls nutzen | <b>done</b></li>
+                <li>session gegen db session abgleichen | <b>done</b></li>
+                <li>session daten auslesen um user zu holen | <b>done</b></li>
+                <li>für spezifische tasks einbauen</li>
             </ul>
             <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing" target="_blank">socket.io Authorizing</a>
             <br/>
             <a href="http://www.danielbaulig.de/socket-ioexpress/" target="_blank">sessions, express und socket.io</a>
         </div>
-        
+
         <script>
             $(document).ready(function() {
                 var jobstatus = new client_jobstatus( new client() );
                 
                 $('input[name="testit[1]"]').click(jobstatus.findUser);
                 $('input[name="testit[2]"]').click(jobstatus.broadcastMessage);
+                $('input[name="testit[3]"]').click(jobstatus.sendUserMessage);
+                
                 //$('#input02').keyup(jobstatus.findUser);
-                $('#input03').focus(jobstatus.findActiveUser);
+                jobstatus.socket.emit('getClientList', {});
                 
             });
-        </script>ö
-        
+        </script>
+
         <script src="http://localhost:8111/socket.io/socket.io.js"></script>
         <script src="client.js"></script>
         <script src="client_jobstatus.js"></script>

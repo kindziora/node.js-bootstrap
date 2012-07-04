@@ -12,5 +12,5 @@ module.exports = function (self) {
         'description' : Sequelize.TEXT
     };
     
-    return self.constructor();
+    return self.constructor(self);
 };

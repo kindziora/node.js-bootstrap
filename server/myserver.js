@@ -13,6 +13,7 @@ module.exports = function (self) {
        
         self.MODEL.job = self.getModel('Job');
         self.MODEL.user = self.getModel('User');
+        self.MODEL.session = self.getModel('Session');
         
         return self;
     };
@@ -33,11 +34,9 @@ module.exports = function (self) {
          * 
          */
         
-         
-        
         return {
             'data' : data,
-            'success' : permission
+            'success': true
         };
     };
     
@@ -59,7 +58,7 @@ module.exports = function (self) {
          * with own mysql class
          */
         getUser : function (data) {
- 
+            console.log( data );
             this.result = function(entry) {
                 self.socket.emit('usernotice', {
                     'result' : entry, 
@@ -71,28 +70,25 @@ module.exports = function (self) {
             self.MODEL.user.findByName(data.name, this.result);
             
         },
-        /**
-        * save user and return result to client
-        */
-        saveUser : function (data) {
-        /*self.MODEL.user.insert(data.user, function(rows, fields) {
-                self.socket.broadcast.emit('response', rows.id);
-            });*/
-        },
         getClientList : function (data) {
-            var clients =  self.io.sockets.clients(),
-            client,
-            clientlist = [];
             
-            for(client in clients) {
-                clientlist.push(clients[client].id);
-            }
+            console.log(self.client);
             
-            self.socket.broadcast.emit('clientlist', clientlist);
-            self.socket.emit('clientlist', clientlist);
+            self.socket.broadcast.emit('clientlist', self.client);
+            self.socket.emit('clientlist', self.client);
+            
         },
         broadcast : function (data) {
             self.socket.broadcast.emit('broadcast', data);
+        },
+        privateMessage : function(data){
+            console.log(self.io.sockets.sockets, data.user);
+            
+            if(g.isset(self.io.sockets.sockets[data.user])) {
+                self.io.sockets.sockets[data.user].emit('result', data.msg);
+            }else {
+                console.log('message konnte nicht gesendet werden');
+            }
         }
     };
     

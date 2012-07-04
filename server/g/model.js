@@ -15,11 +15,13 @@ module.exports = function (db) {
     /**
      * update entry
      */
-    self.update = function(data, cb) {
-        self.db
+    self.update = function(entry, data, cb) {
+ 
+        entry
         .updateAttributes(data)
         .success(cb)
         .error(self.errorHandler);
+        
     };
     
     /**
@@ -35,31 +37,39 @@ module.exports = function (db) {
     /**
      * update or insert depends on id
      */
-    self.upsert = function(data, cb) {
-        if(g.isset(data.id)) {
-            self.db.find(data.id).success(function(entry) {
-                if(g.count(entry) > 0) {
-                    self.update(data, cb);
-                }else{
-                    self.insert(data, cb);
-                }
-            }).error(self.errorHandler);
-        }else {
-            self.insert(data, cb);
-        }
-    };
-    
-    /**
-     * build sequelize model
-     */
-    self.constructor = function() {
-        self.db = self.sequelize.define(self.name, self.fields, {
-            'classMethods' : self,
-            'freezeTableName' : true
-        });
+    self.upsert = function(data, cb, id) {
+        id = (g.isset(id) ? id : 'id');
+        if(g.isset(data[id])) {
+            var q = {
+                where:{}
+        };
         
-        return self;
-    };
+        q.where[id] = data[id];
+        
+        self.db.find(q).success(function(entry) {
+            
+            if(g.count(entry) > 0) {
+                self.update(entry, data, cb);
+            }else{
+                self.insert(data, cb);
+            }
+        }).error(self.errorHandler);
+    }else {
+        self.insert(data, cb);
+    }
+};
     
+/**
+ * build sequelize model
+ */
+self.constructor = function(me) {
+    self.db = self.sequelize.define(me.name, me.fields, {
+        'classMethods' : self,
+        'freezeTableName' : true
+    });
+        
     return self;
+};
+    
+return self;
 };

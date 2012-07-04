@@ -21,13 +21,12 @@ var client_jobstatus = function(self) {
             if(g.isset(lis)){
                 liste += '<li>' + (parseInt(user) +1) + '. ' + data[user][field] + '</li>';
             }else {
-                liste +=  (parseInt(user) +1) + '. ' + data[user][field] + '\n\
+                liste += data[user][field] + '\n\
 ';
             }
         }
         return  liste ;
     };
-    
     
     self.__callback = {
         usernotice : function (data) {
@@ -38,12 +37,15 @@ var client_jobstatus = function(self) {
             self.result('<ul>' + list +  '</ul>');
         },
         clientlist : function(data) {
- 
-            var list = data.join('\n\
-');
-            $('#input03').html(list);
+            self.client = data;
+            $('#input03').html(self.makelist(
+                data, 'username', 'bitte klicken'
+                ));
         },
         broadcast : function(data) {
+            self.result(data);
+        },
+        result : function(data) {
             self.result(data);
         }
     };
@@ -53,13 +55,10 @@ var client_jobstatus = function(self) {
      */
     self.findUser = function(e) {
         e.preventDefault();
+       
         self.socket.emit('getUser', {
             'name': $('#input01').val()
         });
-    };
-    
-    self.findActiveUser = function() {
-        self.socket.emit('getClientList', {});
     };
     
     self.broadcastMessage = function(e) {
@@ -67,7 +66,30 @@ var client_jobstatus = function(self) {
         self.socket.emit('broadcast', $('#input02').val());
     };
     
+    /**
+     * 
+     */
+    self.getNodeId = function(name) {
+        for(var client in self.client) {
+            if(self.client[client]['username'] == name){
+                return self.client[client]['socket'];
+            }
+        }
+    };
     
+    /**
+     * 
+     */
+    self.sendUserMessage = function(e) {
+        e.preventDefault();
+        
+        var nodeUser = self.getNodeId($('#input04name').val());
+        
+        self.socket.emit('privateMessage', {
+            'user' : nodeUser, 
+            'msg' : $('#input04').val()
+            });
+    };
     
     self.bindMethods();
     return self;
