@@ -109,7 +109,6 @@ module.exports = function () {
         return new Buffer(encoded || '', 'base64').toString('utf8');
     };
     
-    
     me.unserialize = function (data) {
         // Takes a string representation of variable and recreates it  
         // 
@@ -271,6 +270,8 @@ module.exports = function () {
  
         return _unserialize((data + ''), 0)[2];
     };
+    
+    
     
     return me;
 

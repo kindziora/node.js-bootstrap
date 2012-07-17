@@ -9,7 +9,6 @@ module.exports = function (config) {
     
     g = new require('./g')(); // global functions singleton
     self.MODEL = {};
-    Sequelize = require("sequelize");
     self.session = {};
     self.client = {};
     
@@ -18,9 +17,7 @@ module.exports = function (config) {
      */
     self.initDb = function() {
         try{
-            self.db = new Sequelize(config.db.database, config.db.user, config.db.password, {
-                'host' : config.db.host
-            });
+            self.db = config.db.connection;
         }catch(e) {
             return e;
         }
@@ -56,7 +53,9 @@ module.exports = function (config) {
                 console.log(req, sess);
             });
             
+            self.server.use(express.staticCache());
             self.server.use(express.static(__dirname + '/public'));
+            
             self.server.use(express.errorHandler({
                 showStack: true, 
                 dumpExceptions: true
@@ -123,7 +122,7 @@ module.exports = function (config) {
      * @return instance of db model "name"
      */
     self.getModel = function(name) {
-        return new require('../model/' + name)( require('./model')(self.db));
+        return new require('../' + self.name + '/model/' + name)( require('./model/' + config.db.type)(self.db));
     };
     
     /**

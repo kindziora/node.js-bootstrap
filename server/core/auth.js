@@ -90,7 +90,7 @@ module.exports = function (init) {
     };
     
     /**
-     * 
+     * disconnect
      */
     self.disconnect = function(socket) {
         console.log('DELETE:' + socket.id);
@@ -99,6 +99,9 @@ module.exports = function (init) {
        
     };
     
+    /**
+     * 
+     */
     self.constructor = function() {
         console.log('constructor PERMISSION');
         init.io.set('authorization', self.checkPermission); 

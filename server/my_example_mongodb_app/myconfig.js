@@ -4,11 +4,11 @@
  */
 module.exports = {
     'db': {
-        host     : 'localhost',
-        user     : 'root',
-        password : 'root',
-        database : 'crowdmodul'
+        type     : 'mongodb',
+        connection: new Db('test', new Server("127.0.0.1", 27017, {}))
     },
     'port' : 8111,
     'auth' : require('./g/auth')
 };
+
+
