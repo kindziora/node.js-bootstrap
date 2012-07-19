@@ -15,9 +15,19 @@ module.exports = function (config) {
     /**
      * init database
      */
-    self.initDb = function() {
+    self.initDb = function(cb) {
         try{
             self.db = config.db.connection;
+            if(g.isset(self.db.open)) {
+                self.db.open(function(err, p_client) {
+                    self.client = p_client;
+                    console.log('db connected');
+                    cb(err, p_client);
+                });
+            }else{
+                cb();
+            }
+           
         }catch(e) {
             return e;
         }
@@ -28,11 +38,9 @@ module.exports = function (config) {
      * init authentication
      */
     self.initAuth = function() {
-        try{
-            self.myauth = new config.auth(self);
-        }catch(e) {
-            return e;
-        }
+        
+        self.myauth = new config.auth(self);
+        
         return true;
     };
     
@@ -40,30 +48,34 @@ module.exports = function (config) {
      * init sockserver
      */
     self.initServer = function() {
-        try{
-            var express = require('express');
-            self.server = express.createServer();
-            self.io = require('socket.io').listen(self.server);
-            self.server.use(express.cookieParser());
-            
-            //self.server.use(express.session({secret: 'secret', key: 'express.sid'}));
-            
-            self.server.use(function(req, res, next){
-                var sess = req.session;
-                console.log(req, sess);
-            });
-            
-            self.server.use(express.staticCache());
-            self.server.use(express.static(__dirname + '/public'));
-            
-            self.server.use(express.errorHandler({
-                showStack: true, 
-                dumpExceptions: true
-            }));
-            self.server.listen(config.port);
-        }catch(e) {
-            return e;
+        
+        var express = require('express');
+        self.server = express.createServer();
+        
+        for(var name in self.controller) {
+            self.controller[name] = new self.controller[name](new require('./controller')(self.server));
+            console.log(self.controller[name]);
         }
+        
+        self.server.use(express.cookieParser());
+            
+        //self.server.use(express.session({secret: 'secret', key: 'express.sid'}));
+            
+        self.server.use(function(req, res, next){
+            var sess = req.session;
+          //  console.log(req);
+        });
+            
+        self.server.use(express.staticCache());
+        self.server.use(express.static(__dirname + '/public'));
+            
+        self.server.use(express.errorHandler({
+            showStack: true, 
+            dumpExceptions: true
+        }));
+                
+        self.io = require('socket.io').listen(self.server);
+        self.server.listen(config.port);
         return true;
     };
     
@@ -73,48 +85,48 @@ module.exports = function (config) {
      * init sockserver
      */
     self.bindMethods = function() {
-        try {
+        
             
-            /**
+        /**
              * execute pre and call binding
              */
-            self.io.sockets.on('connection', function (socket) {
-                self.socket = socket;
+        self.io.sockets.on('connection', function (socket) {
+            self.socket = socket;
                 
-                self.myauth.connect(self.socket);
+            self.myauth.connect(self.socket);
 
-                if(!g.isFunction(self.__before)) {
-                    self.__before = function(psock, evt) {
-                        return {
-                            'data' : psock, 
-                            'success' : true
-                        };
-                    };
-                }
-                
-                /* variable injection via lambda function factory used in iteration */
-                var factory = function(evt) {
-                    return function(sock) {
-                        console.log(sock.id);
-                        var result = self.__before(sock, evt);
-                        if(result.success) {
-                            self.__execute[evt](result.data);
-                        }
+            if(!g.isFunction(self.__before)) {
+                self.__before = function(psock, evt) {
+                    return {
+                        'data' : psock, 
+                        'success' : true
                     };
                 };
+            }
                 
-                /* binding all methods */
-                for(var evt in self.__execute) {
-                    socket.on(evt, factory(evt));
-                }
+            /* variable injection via lambda function factory used in iteration */
+            var factory = function(evt) {
+                return function(sock) {
+                        
+                    console.log(sock.id);
+                        
+                    var result = self.__before(sock, evt);
+                    if(result.success) {
+                        self.__execute[evt](result.data, sock);
+                    }
+                };
+            };
+                
+            /* binding all methods */
+            for(var evt in self.__execute) {
+                socket.on(evt, factory(evt));
+            }
              
-            });
+        });
             
-            self.io.sockets.on('disconnect', self.myauth.disconnect);
+        self.io.sockets.on('disconnect', self.myauth.disconnect);
             
-        }catch(e) {
-            return e;
-        }
+       
         return true;
     };
     
@@ -122,33 +134,37 @@ module.exports = function (config) {
      * @return instance of db model "name"
      */
     self.getModel = function(name) {
-        return new require('../' + self.name + '/model/' + name)( require('./model/' + config.db.type)(self.db));
+        return new require('../' + self.name + '/model/' + name)( new require('./model/' + config.db.type)(self.db));
     };
     
     /**
      * init app
      */
-    self.constructor = function() {
+    self.constructor = function(controller) {
+        
         var init = [{
             'crowdguru': 'starting g server'
         }];
-        init.push({
-            'initDB:' : self.initDb()
-        });
+        
+        self.controller = controller;
         
         init.push({
-            'initServer:' : self.initServer()
-        });
-       
-        init.push({
-            'initAuth:' : self.initAuth()
+            'initDB:' : self.initDb(function(err, p_client){
+                init.push({
+                    'initServer:' : self.initServer()
+                });
+                
+                init.push({
+                    'initAuth:' : self.initAuth()
+                });
+                
+                init.push({
+                    'bindMethods' : self.bindMethods()
+                });
+                console.log(init);
+            })
         });
         
-        init.push({
-            'bindMethods' : self.bindMethods()
-        });
-        
-        console.log(init);
     };
     
     //self.constructor(); ONLY in child class

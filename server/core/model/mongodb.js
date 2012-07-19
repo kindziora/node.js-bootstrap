@@ -59,13 +59,8 @@ module.exports = function (db) {
     /**
  * open mongodb connection
  */
-    self.constructor = function(me) {
-        self.name = me.name;
-        db.open(function(err, p_client) {
-            self.client = p_client;
-            console.log('db connected');
-        });
-
+    self.constructor = function() {
+       
         return self;
     };
     
@@ -73,7 +68,7 @@ module.exports = function (db) {
      * close mongodb connection
      */
     self.destructor = function() {
-        db.close();
+       // db.close();
     }
     
     return self;

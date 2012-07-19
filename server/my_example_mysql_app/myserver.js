@@ -11,8 +11,10 @@ module.exports = function (self) {
      */
     this.constructor = function () {
         
-        self.constructor(); //call parent constructor
-       
+        self.constructor({
+            user : require('./controller/user')
+        }); //call parent constructor
+        
         self.MODEL.job = self.getModel('Job');
         self.MODEL.user = self.getModel('User');
         self.MODEL.session = self.getModel('Session');
@@ -35,6 +37,7 @@ module.exports = function (self) {
         };
     };
     
+   
     /**
      * magic __bind methods that get executed if triggered on client side
      */
@@ -55,7 +58,6 @@ module.exports = function (self) {
         getUser : function (data) {
             console.log( data );
             this.result = function(entry) {
-                
                 self.socket.emit('usernotice', {
                     'result' : entry, 
                     'keyword' : data.name
@@ -67,26 +69,22 @@ module.exports = function (self) {
             
         },
         getClientList : function (data) {
-            
-            console.log(self.client);
-            
             self.socket.broadcast.emit('clientlist', self.client);
             self.socket.emit('clientlist', self.client);
-            
         },
         broadcast : function (data) {
             self.socket.broadcast.emit('broadcast', data);
         },
-        privateMessage : function(data){
+        privateMessage : function(data) {
             console.log(self.io.sockets.sockets, data.user);
             
             if(g.isset(self.io.sockets.sockets[data.user])) {
                 self.io.sockets.sockets[data.user].emit('result', data.msg);
             }else {
-                console.log('sending message failed');
+                console.log('sending message failed, client not found', data.user);
             }
         }
     };
-    
+   
     return this.constructor();
 };

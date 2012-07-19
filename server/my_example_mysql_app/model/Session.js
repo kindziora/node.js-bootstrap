@@ -15,12 +15,15 @@ module.exports = function (self) {
         'session_time' : Sequelize.INTEGER
     };
     
+    /**
+     *
+     */
     self.setNodeId = function(node, sid, cb) {
         /**
          * @todo remove after updateRecords work 
          */
         self.sequelize.query( "UPDATE `session` SET `node_id`=" + node + " WHERE session_id='" + sid +"'").on('success', cb)
-    }
+    };
     
-    return self.constructor(self);
+    return self.constructor();
 };

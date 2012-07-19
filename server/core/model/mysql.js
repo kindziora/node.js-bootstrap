@@ -16,12 +16,10 @@ module.exports = function (db) {
      * update entry
      */
     self.update = function(entry, data, cb) {
- 
         entry
         .updateAttributes(data)
         .success(cb)
         .error(self.errorHandler);
-        
     };
     
     /**
@@ -42,34 +40,37 @@ module.exports = function (db) {
         if(g.isset(data[id])) {
             var q = {
                 where:{}
-        };
+            };
         
-        q.where[id] = data[id];
+            q.where[id] = data[id];
         
-        self.db.find(q).success(function(entry) {
+            self.db.find(q).success(function(entry) {
             
-            if(g.count(entry) > 0) {
-                self.update(entry, data, cb);
-            }else{
-                self.insert(data, cb);
-            }
-        }).error(self.errorHandler);
-    }else {
-        self.insert(data, cb);
-    }
-};
+                if(g.count(entry) > 0) {
+                    self.update(entry, data, cb);
+                }else{
+                    self.insert(data, cb);
+                }
+            }).error(self.errorHandler);
+        }else {
+            self.insert(data, cb);
+        }
+    };
     
-/**
- * build sequelize model
- */
-self.constructor = function(me) {
-    self.db = self.sequelize.define(me.name, me.fields, {
-        'classMethods' : self,
-        'freezeTableName' : true
-    });
+    /**
+    * build sequelize model
+    */
+    self.constructor = function() {
         
-    return self;
-};
+        console.log('model created ' + self.name);
+        
+        self.db = self.sequelize.define(self.name, self.fields, {
+            'classMethods' : self,
+            'freezeTableName' : true
+        });
+        
+        return self;
+    };
     
-return self;
+    return self;
 };

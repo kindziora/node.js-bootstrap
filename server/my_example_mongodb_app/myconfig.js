@@ -10,5 +10,3 @@ module.exports = {
     'port' : 8111,
     'auth' : require('./g/auth')
 };
-
-

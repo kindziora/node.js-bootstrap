@@ -1,6 +1,7 @@
 /**
  * this is the app starting point
  * it handles the inheritance order of our server
+ * + dependency injection
  */
 
 var myserver = require('./myserver'),

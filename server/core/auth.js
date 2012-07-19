@@ -72,42 +72,35 @@ module.exports = function (init) {
     self.connect = function(socket) {
         console.log('connect PERMISSION');
         if(g.isset(self.entry)) {
-        console.log('POSTAUTH', init.session);
-        /**
-            * @todo remove after updateRecords work 
-            */
-        self.model.setNodeId(socket.id, self.entry.session_id, function(result) {
-            init.session.nodeId = socket.id;
-            
-            var user = init.session;
-            init.client[user.id] = {
-                'username' : user.username, 
-                'socket' : socket.id
-            };
-        });
-            
+
+            self.entry.updateAttributes({
+                'node_id' : socket.id
+            }).success(function() {
+                init.client[init.session.id] = {
+                    'username' : init.session.username,
+                    'socket' : socket.id
+                };
+            });
         }
     };
     
     /**
-     * disconnect
-     */
+ * disconnect
+ */
     self.disconnect = function(socket) {
         console.log('DELETE:' + socket.id);
         init.client[init.session.id] = null;
         delete init.client[init.session.id];
-       
     };
     
     /**
-     * 
-     */
+ * 
+ */
     self.constructor = function() {
         console.log('constructor PERMISSION');
         init.io.set('authorization', self.checkPermission); 
         return self;
     };
-   
     
     return self.constructor();
 };

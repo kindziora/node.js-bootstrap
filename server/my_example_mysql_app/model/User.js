@@ -30,6 +30,5 @@ module.exports = function (self) {
         self.sequelize.query( "SELECT * FROM `User` WHERE username LIKE '%" + name + "%' LIMIT 10", null, {raw: true}).on('success', cb);
     };
     
-    
-    return self.constructor(self);
+    return self.constructor();
 };
