@@ -5,6 +5,7 @@
 module.exports = function (parent) {
     var self = this;
     
+    
     /** HTTP ENDPOINT **/
     self.constructor = function() {
         /**
@@ -19,7 +20,7 @@ module.exports = function (parent) {
                 };
             };
         }
-            
+        
         /* variable injection via lambda function factory used in iteration */
         var factory = function(evt) {
             return function(req, res) {
@@ -36,10 +37,12 @@ module.exports = function (parent) {
         
         /* binding all methods */
         for(var evt in self.action) {
-            var method = (evt.indexOf('[post]') > 0) ? 'post' : 'get',
+            
+            var method = (evt.indexOf('[post]')!== false) ? 'post' : 'get',
             action = evt.replace(/\[[a-z]*\]/i,'');
-            console.log('route registered /' + self.url + '/' + action, '.' + method + '.');
-                
+            
+            console.log(evt.indexOf('[post]') + evt + ' route registered /' + self.url + '/' + action, '.' + method + '.');
+            
             parent[method]('/' + self.url + '/' + action, factory(evt));
         }
         

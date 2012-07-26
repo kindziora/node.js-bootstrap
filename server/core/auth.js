@@ -98,7 +98,7 @@ module.exports = function (init) {
  */
     self.constructor = function() {
         console.log('constructor PERMISSION');
-        init.io.set('authorization', self.checkPermission); 
+        init.io.set('authorization', self.checkPermission);
         return self;
     };
     

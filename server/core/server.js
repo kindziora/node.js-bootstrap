@@ -16,7 +16,7 @@ module.exports = function (config) {
      * init database
      */
     self.initDb = function(cb) {
-        try{
+    
             self.db = config.db.connection;
             if(g.isset(self.db.open)) {
                 self.db.open(function(err, p_client) {
@@ -28,9 +28,7 @@ module.exports = function (config) {
                 cb();
             }
            
-        }catch(e) {
-            return e;
-        }
+        
         return true;
     };
     
@@ -54,7 +52,6 @@ module.exports = function (config) {
         
         for(var name in self.controller) {
             self.controller[name] = new self.controller[name](new require('./controller')(self.server));
-            console.log(self.controller[name]);
         }
         
         self.server.use(express.cookieParser());

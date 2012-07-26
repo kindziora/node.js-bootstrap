@@ -4,7 +4,7 @@
  */
 module.exports = function (self) {
     self.url = 'user';
-    var app = require('../app');
+    self.app = require('../app');
     /** HTTP ENDPOINTS **/
     
     /**
@@ -15,8 +15,8 @@ module.exports = function (self) {
             
             console.log('message called');
             
-            if(g.isset(data)) {
-                app.__execute.privateMessage({
+            if(g.isset(data) && g.isset(data.req.params.user) && g.isset(data.req.params.msg)) {
+                self.app.__execute.privateMessage({
                     'user' : data.req.params.user.id,
                     'msg' : data.req.params.msg
                 });

@@ -56,7 +56,9 @@ module.exports = function (self) {
          * with own mysql class
          */
         getUser : function (data) {
+            
             console.log( data );
+            
             this.result = function(entry) {
                 self.socket.emit('usernotice', {
                     'result' : entry, 
