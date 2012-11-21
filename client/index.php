@@ -151,7 +151,7 @@
             });
         </script>
 
-        <script src="http://localhost:8111/socket.io/socket.io.js"></script>
+        <script src="http://192.168.1.135:8111/socket.io/socket.io.js"></script>
         <script src="client.js"></script>
         <script src="client_jobstatus.js"></script>
     </body>

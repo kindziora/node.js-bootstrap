@@ -72,7 +72,7 @@ var client_jobstatus = function(self) {
     self.getNodeId = function(name) {
         for(var client in self.client) {
             if(self.client[client]['username'] == name){
-                return self.client[client]['socket'];
+                return client;
             }
         }
     };
